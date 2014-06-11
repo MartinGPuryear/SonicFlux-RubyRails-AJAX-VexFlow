@@ -1,0 +1,15 @@
+<h1>Rounds Creator</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= rounds_path %>'>All Rounds</a>
+
+<p>
+	Unlikely to be used.  Would create a round (num_participants, difficulty_level, created_at, updated_at), with linkage to its multiple Results and Question_Occurrences.
+</p>
+
+<%= simple_form_for(@round, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do | r |	%>
+    <%= r.input :num_participants, input_html: {autofocus: true }	%>
+    <%= r.input :difficulty_level									%>
+    <%= r.input :max_qo_index										%>
+    <%= r.submit 'Create', class: 'btn btn-primary form-button' 	%>
+<% end %>

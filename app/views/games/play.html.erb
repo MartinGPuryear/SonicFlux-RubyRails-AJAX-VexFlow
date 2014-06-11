@@ -1,0 +1,104 @@
+<% content_for :js_set_user_code do %>
+
+var my_public_profile = {
+    id: <%= @public_user.id %>,
+    player_tag: '<%= @public_user.player_tag %>',
+    difficulty_level: <%= @public_user.difficulty_level_id %>
+  };
+
+<% end %>
+
+<% content_for :main_play_page do %>
+
+<div id='play-page'>
+  
+  <div class='col-xs-7'>
+    <h2 class='text-left'>Sonic Play</h2>
+    <h4 class='text-left'> Difficulty: <span id='difficulty-level-display'></span></h4>      
+
+    <div id='question-div' class='col-xs-6'>
+      <div>
+        <span id='prompt'></span>
+        <input type='hidden' id='content' value='' />
+      </div>
+
+      <canvas width=110 height=145></canvas>
+    </div>
+
+    <div id='choices-div' class='col-xs-4'>
+      <form action='/answer' method='post' role='form' id='button-strip' class='sxs'>
+        <%= tag(:input, type: "hidden", name: request_forgery_protection_token.to_s, value: form_authenticity_token) %>
+        <input type='hidden' name='round_question_num' id='round-question-num' value='' />
+        <input type='hidden' name='diff_lvl' id='diff-lvl' value='' />
+        <input type='hidden' name='chosen_id' id='chosen-id' value='' />
+        <button id='choice-btn-0' class='btn btn-primary quiz-btn'></button>
+        <button id='choice-btn-1' class='btn btn-primary quiz-btn'></button>
+        <button id='choice-btn-2' class='btn btn-primary quiz-btn'></button>
+        <button id='choice-btn-3' class='btn btn-primary quiz-btn'></button>
+        <button id='choice-btn-4' class='btn btn-primary quiz-btn'></button>
+        <button id='choice-btn-skip' class='btn btn-primary quiz-btn' value='-1'>Skip</button>
+      </form>
+    </div>
+  </div>
+
+  <div class='col-xs-5'>
+    <h4 id='score' class='text-center'>Score: <span>0</span></h4>
+    <div id='countdown-bar' class='progress'>
+      <div class='progress-bar progress-bar-bkgd' id='prog-bar-bkgd' style='width:0%'></div>
+      <div class='progress-bar progress-bar-primary' id='prog-bar-clr' style='width:100%'>
+        <div id='prog-bar-txt'></div>
+      </div>
+    </div>
+    <table id='live-leader-table' class='table table-hover table-striped'>
+      <caption><strong>Leaderboard</strong></caption>
+      <thead><tr><th>Gamer</th><th>Score</th></tr></thead>
+      <tbody id='live-leader-table-body'></tbody>
+    </table>
+  </div>
+
+<!--  <audio loop id='tick'>
+    <source src='' type='audio/wav' id='audio-source' />
+    <source src='' type='audio/mp3' id='alt-audio-source' />
+    Your browser does not support the audio element.
+  </audio> -->
+
+  <div></div>
+</div>
+
+<div id='lobby-page'>
+  <div class='col-xs-7'>
+    <h2 class='text-left'>Sonic Lobby</h2>
+    <div class='col-xs-5'>
+      <table id='next-round-table' class='table table-hover table-striped'>
+        <caption><strong>Next round</strong></caption>
+        <tbody id='next-round-table-body'></tbody>
+      </table>
+    </div>
+
+    <div class='col-xs-7'>
+      <h4>Difficulty Level</h4>
+      <form action='/change_difficulty' method='post' role='form' id='diff-lvl-strip' class='sxs'>
+        <%= tag(:input, type: "hidden", name: request_forgery_protection_token.to_s, value: form_authenticity_token) %>
+        <input type='hidden' name='difficulty_level' id='difficulty-level' value='' />
+        <button id='diff-lvl-0' class='btn diff-lvl-btn' value='0'>Beginner</button>
+        <button id='diff-lvl-1' class='btn diff-lvl-btn' value='1'>Intermediate</button>
+        <button id='diff-lvl-2' class='btn diff-lvl-btn' value='2'>Advanced</button>
+        <button id='diff-lvl-3' class='btn diff-lvl-btn' value='3'>Expert</button>
+        <!-- <button id='diff-lvl-4' class='btn diff-lvl-btn' value='4'>Deity</button> -->
+      </form>
+    </div>
+  </div>
+
+  <div class='col-xs-5'>
+    <h4>Next game starts in: <span id='time-left'></span></h4>
+      <table id='results-table' class='table table-hover table-striped'>
+      <caption><strong>Results</strong></caption>
+      <thead><tr><th>Gamer</th><th>Score</th></tr></thead>
+      <tbody id='results-table-body'>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<% end %>
+

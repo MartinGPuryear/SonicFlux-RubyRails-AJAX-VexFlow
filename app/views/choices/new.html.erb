@@ -1,0 +1,13 @@
+<h1>Choice Creator</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= choices_path %>'>All Choices</a>
+
+<p>Similar to Choices#edit.  Admins would use this page to create Choices - setting the prompt, content or choice type of a choice.  Should also be able to show a list of questions with this Choice Type, and set this choice as Correct or Close for that question.</p>
+
+<%= simple_form_for(@choice, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do | c |	%>
+    <%= c.input :choice_type, input_html: {autofocus: true }	%>
+    <%= c.input :prompt											%>
+    <%= c.input :content										%>
+    <%= c.submit 'Create', class: 'btn btn-primary form-button' %>
+<% end %>

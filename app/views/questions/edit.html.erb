@@ -1,0 +1,23 @@
+<h1>Questions Editor</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= questions_path %>'>All Questions</a>
+  | 
+<a href='<%= new_question_path %>'>New Question</a>
+
+<p>This is where Admins would change a Question's question type, choice type, content, correct choice or close choice. </p>
+
+<a href='<%= question_path(@question.id) %>'>Show</a>
+  | 
+<a href='<%= question_path(@question.id) %>' data-method='delete'>Delete</a>
+
+<%= simple_form_for(@question, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do |q| %>
+    <%= q.input :question_type_id, input_html: {autofocus: true } %>
+    <%= q.input :choice_type                                      %>
+    <%= q.input :content                                          %>
+    <%= q.association :difficulty_level, include_blank: false,
+                      label_method: :desc, value_method: :id      %>
+    <%= q.input :correct_choice_id                                %>
+    <%= q.input :close_choice_id                                  %>
+    <%= q.submit 'Update', class: 'btn btn-primary form-button'   %>
+<% end %>

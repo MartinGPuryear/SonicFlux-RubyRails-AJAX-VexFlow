@@ -1,0 +1,31 @@
+<h1>Choice Detail</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= choices_path %>'>All Choices</a>
+	| 
+<a href='<%= new_choice_path %>'>New Choice</a>
+
+<p>This is where the Admin would see detailed info about this choice.  Perhaps show which questions consider it Correct and Close, as well as how frequently it is 1) correctly identified, 2) correctly NOT chosen (when close, random), 3) correctly skipped (when close, random), 4) incorrectly skipped (when correct), 5) incorrectly chosen (when close, random), 6) incorrectly NOT chosen (when correct).</p>
+
+<a href='<%= edit_choice_path(@choice.id) %>'>Edit</a>
+	| 
+<a href='<%= choice_path(@choice.id) %>' data-method='delete'>Delete</a>
+
+<table class='table table-condensed table-striped table-hover'>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Choice Type</th>
+			<th>Prompt</th>
+			<th>Content</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= @choice.id %></td>
+			<td><%= @choice.choice_type %></td>
+			<td><%= @choice.prompt %></td>
+			<td><%= @choice.content %></td>
+		</tr>
+	</tbody>
+</table>

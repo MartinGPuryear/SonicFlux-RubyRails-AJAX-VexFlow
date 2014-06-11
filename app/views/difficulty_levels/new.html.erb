@@ -1,0 +1,11 @@
+<h1>Difficulty Level Creator</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= difficulty_levels_path %>'>All Difficulty Levels</a>
+
+<p>Used to create new difficulty levels.</p>
+
+<%= simple_form_for(@difficulty_level, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do | dl |	%>
+    <%= dl.input :desc, input_html: {autofocus: true }		 %>
+    <%= dl.submit 'Create', class: 'btn btn-primary form-button' %>
+<% end %>

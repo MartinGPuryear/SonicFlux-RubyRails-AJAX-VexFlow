@@ -1,0 +1,37 @@
+<h1>Users#index</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= new_user_path %>'>New User</a>
+
+<p>
+	Admins view list of user accounts.  Probably has links to Edit and/or Delete them.
+</p>
+
+<% 	if @users.length	%>
+		<table class='table table-condensed table-striped table-hover'>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Player Tag</th>
+					<th>Difficulty Level</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+<%		@users.each { | user | %>
+				<tr>
+					<td><%= user.id %></td>
+					<td><%= user.player_tag %></td>
+					<td><%= user.difficulty_level.desc %></td>
+					<td>
+						<a href='<%= user_path(user.id) %>'>Show</a>
+							| 
+						<a href='<%= edit_user_path(user.id) %>'>Edit</a>
+							| 
+						<a href='<%= user_path(user.id) %>' data-method='delete'>Delete</a>
+					</td>
+				</tr>
+<%		}	%>
+			</tbody>
+		</table>
+<%	end  %>

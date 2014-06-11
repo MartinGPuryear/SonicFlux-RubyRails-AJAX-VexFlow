@@ -1,0 +1,297 @@
+<h1>Leaderboard</h1>
+
+<ul class="nav nav-pills">
+	<li class="active"><a href="#hour" data-toggle="tab">This Hour</a></li>
+	<li><a href="#day" data-toggle="tab">Today</a></li>
+	<li><a href="#week" data-toggle="tab">This Week</a></li>
+	<li><a href="#month" data-toggle="tab">This Month</a></li>
+	<li><a href="#year" data-toggle="tab">This Year</a></li>
+	<li><a href="#all" data-toggle="tab">All Time</a></li>
+</ul>
+
+<div class="tab-content">
+	<div class="tab-pane fade in active" id="hour">
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Average Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, avg(points) AS avg").where(created_at: 1.hours.ago..DateTime.now).group("player_tag").order("avg(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.avg.round(2) %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>High Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, max(points) as max").where(created_at: 1.hours.ago..DateTime.now).group("player_tag").order("max(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.max %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Total Points</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, sum(points) as sum").where(created_at: 1.hours.ago..DateTime.now).group("player_tag").order("sum(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.sum %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="day">
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Average Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, avg(points) AS avg").where(created_at: 1.days.ago..DateTime.now).group("player_tag").order("avg(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.avg.round(2) %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>High Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, max(points) as max").where(created_at: 1.days.ago..DateTime.now).group("player_tag").order("max(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.max %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Total Points</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, sum(points) as sum").where(created_at: 1.days.ago..DateTime.now).group("player_tag").order("sum(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.sum %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="week">
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Average Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, avg(points) AS avg").where(created_at: 1.weeks.ago..DateTime.now).group("player_tag").order("avg(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.avg.round(2) %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>High Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, max(points) as max").where(created_at: 1.weeks.ago..DateTime.now).group("player_tag").order("max(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.max %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Total Points</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, sum(points) as sum").where(created_at: 1.weeks.ago..DateTime.now).group("player_tag").order("sum(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.sum %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="month">
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Average Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, avg(points) AS avg").where(created_at: 1.months.ago..DateTime.now).group("player_tag").order("avg(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.avg.round(2) %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>High Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, max(points) as max").where(created_at: 1.months.ago..DateTime.now).group("player_tag").order("max(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.max %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Total Points</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, sum(points) as sum").where(created_at: 1.months.ago..DateTime.now).group("player_tag").order("sum(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.sum %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="year">
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Average Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, avg(points) AS avg").where(created_at: 1.years.ago..DateTime.now).group("player_tag").order("avg(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.avg.round(2) %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>High Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, max(points) as max").where(created_at: 1.years.ago..DateTime.now).group("player_tag").order("max(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.max %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Total Points</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, sum(points) as sum").where(created_at: 1.years.ago..DateTime.now).group("player_tag").order("sum(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.sum %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="all">
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Average Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, avg(points) AS avg").group("player_tag").order("avg(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.avg.round(2) %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>High Score</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, max(points) as max").group("player_tag").order("max(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.max %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+				</tbody>
+			</table>
+		</div>
+		<div class='col-xs-4'>
+			<table class='table table-striped table-condensed table-hover'>
+				<caption>Total Points</caption>
+				<tbody>
+				<%	extraNeeded = @num_leaders
+					@results.select("player_tag, sum(points) as sum").group("player_tag").order("sum(points) DESC").limit(@num_leaders).each {|l| %>
+					<tr><td><%= l.player_tag %></td><td><%= l.sum %></td></tr>
+				<%		extraNeeded -= 1; 
+					}
+					extraNeeded.times{ 	%>
+					<tr><td>-</td><td>-</td></tr>
+				<%	} 	%>
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

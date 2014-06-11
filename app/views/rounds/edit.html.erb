@@ -1,0 +1,19 @@
+<h1>Rounds Editor</h1>
+
+<a href='<%= rounds_path %>'>All Rounds</a>
+  | 
+<a href='<%= new_round_path %>'>New Round</a>
+
+<p>Unlikely to be used, but available for cleaning up the historical list of Rounds (num_participants, difficulty_level, created_at, updated_at), with linkage to its multiple Results and Question_Occurrences.  Could also delete from here (which would dependent-destroy the associated Results and Question_Occurrences).</p>
+
+<a href='<%= round_path(@round.id) %>'>Show</a>
+  | 
+<a href='<%= round_path(@round.id) %>' data-method='delete'>Delete</a>
+
+<%= simple_form_for(@round, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do | r |  %>
+    <%= r.input :num_participants, input_html: {autofocus: true } %>
+    <%= r.association :difficulty_level, include_blank: false,
+                      label_method: :desc, value_method: :id      %>
+    <%= r.input :max_qo_index                                     %>
+    <%= r.submit 'Update', class: 'btn btn-primary form-button'   %>
+<% end %>

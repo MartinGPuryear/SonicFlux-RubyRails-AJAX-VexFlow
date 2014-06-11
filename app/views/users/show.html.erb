@@ -1,0 +1,38 @@
+<h2><%= @user.player_tag %>'s gamer profile</h2>
+
+<%  if current_user_admin?  %>
+  <a href='<%= users_path %>'>All Users</a>
+    | 
+  <a href='<%= new_user_path %>'>New User</a>
+
+  <p>
+    Admins view details of a user account.  Has links to Edit and/or Delete it.
+  </p>
+
+  <a href='<%= edit_user_path(@user.id) %>'>Edit</a>
+    | 
+  <a href='<%= user_path(@user.id) %>' data-method='delete'>Delete</a>
+<%  elsif current_user?(@user)  %>
+  <a href='<%= edit_user_path(@user.id) %>'>Edit</a>
+<%  end   %>
+
+<table class='table table-condensed table-striped table-hover'>
+  <thead>
+    <tr>
+<%  if current_user_admin?  %>
+      <th>ID</th>
+<%  end   %>
+      <th>Player Tag</th>
+      <th>Difficulty Level</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+<%  if current_user_admin?  %>
+      <td><%= @user.id %></td>
+<%  end   %>
+      <td><%= @user.player_tag %></td>
+      <td><%= @user.difficulty_level.desc %></td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,13 @@
+<h1>Question Occurrence Creator</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= question_occurrences_path %>'>All Question Occurrences</a>
+
+<p>Might be used to create custom question sets, for calibrating difficulty.</p>
+
+<%= simple_form_for(@question_occurrence, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do | qo |	%>
+    <%= qo.input :round_id, input_html: {autofocus: true }		 %>
+    <%= qo.input :question_id									 %>
+    <%= qo.input :index_in_round								 %>
+    <%= qo.submit 'Create', class: 'btn btn-primary form-button' %>
+<% end %>

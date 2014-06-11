@@ -1,0 +1,17 @@
+<h1>Question Types</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= question_types_path %>'>All Question Types</a>
+	| 
+<a href='<%= new_question_type_path %>'>New Question Type</a>
+
+<p>Admins change the definition (and description) of a question type.</p>
+
+<a href='<%= question_type_path(@question_type.id) %>'>Show</a>
+	| 
+<a href='<%= question_type_path(@question_type.id) %>' data-method='delete'>Delete</a>
+
+<%= simple_form_for(@question_type, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do | qt |	%>
+    <%= qt.input :prompt, input_html: {autofocus: true }		 %>
+    <%= qt.submit 'Update', class: 'btn btn-primary form-button' %>
+<% end %>

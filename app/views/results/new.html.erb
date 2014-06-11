@@ -1,0 +1,18 @@
+<h1>Results Creator</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= results_path %>'>All Results</a>
+
+<p>This is where historical results can be created.  Probably useful for testing the Leaderboards.</p>
+
+<%= simple_form_for(@result, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do | r |	%>
+    <%= r.input :user_id, input_html: {autofocus: true }		%>
+    <%= r.input :round_id										%>
+    <%= r.input :round_complete									%>
+    <%= r.input :num_correct									%>
+    <%= r.input :num_skipped									%>
+    <%= r.input :num_incorrect									%>
+    <%= r.input :points											%>
+    <%= r.input :rank											%>
+    <%= r.submit 'Create', class: 'btn btn-primary form-button' %>
+<% end %>

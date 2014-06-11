@@ -1,0 +1,33 @@
+<h1>Question Types</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= new_question_type_path %>'>New question type</a>
+
+<p>Admins view the list of all types of questions.</p>
+
+<% 	if @question_types.length	%>
+		<table class='table table-condensed table-striped table-hover'>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Prompt</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+<%		@question_types.each { | qt | %>
+				<tr>
+					<td><%= qt.id %></td>
+					<td><%= qt.prompt %></td>
+					<td>
+						<a href='<%= question_type_path(qt.id) %>'>Show</a>
+							| 
+						<a href='<%= edit_question_type_path(qt.id) %>'>Edit</a>
+							| 
+						<a href='<%= question_type_path(qt.id) %>' data-method='delete'>Delete</a>
+					</td>
+				</tr>
+<%		}	%>
+			</tbody>
+		</table>
+<%	end  %>

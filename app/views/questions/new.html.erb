@@ -1,0 +1,16 @@
+<h1>Questions Creator</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= questions_path %>'>All Questions</a>
+
+<p>This is where an Admin would enter "Question Editor" mode, to create new questions.  Question type (drop-down), choice type (drop-down), content, correct choice (drop-down filtered by choice type) and close choice (ditto).</p>
+
+<%= simple_form_for(@question, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do | q |	%>
+    <%= q.input :question_type_id, input_html: {autofocus: true }	%>
+    <%= q.input :choice_type										%>
+    <%= q.input :difficulty_level									%>
+    <%= q.input :content											%>
+    <%= q.input :correct_choice_id									%>
+    <%= q.input :close_choice_id									%>
+    <%= q.submit 'Create', class: 'btn btn-primary form-button' 	%>
+<% end %>

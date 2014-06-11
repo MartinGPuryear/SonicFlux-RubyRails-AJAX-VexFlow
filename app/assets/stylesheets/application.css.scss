@@ -1,0 +1,94 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ *= require bootstrap
+ */
+
+body{
+	font-family: sans-serif;
+	min-height: 450px;
+	padding-top: 50px;
+}
+
+.navbar{
+	margin-bottom: 0;
+}
+
+.navbar-brand{
+	font-size: 24px;
+	font-weight: 700;
+	width: 7em;
+}
+
+.navbar-right{
+	margin-right: 0;
+	/*padding-right: 10px;*/
+	padding-right: 0;
+}
+
+#intro-div, #about-div, #signin-frame{
+	border: 1px solid darkgrey;
+	height: 220px;
+	margin: 60px auto;
+	padding: 18px;
+	width: 400px;
+}
+#intro-div{
+	padding-bottom: 12px;
+}
+#about-div{
+}
+
+.leaderboard-header{
+	font-style: italic;
+	font-weight: 900;
+	text-decoration: underline;
+}
+
+#signin-inner-frame{
+	margin: 12px;
+	margin-top: 0px;
+}
+
+#signin-header, #signin-btn-frame{
+}
+
+#ad-words-div{
+   	position:fixed;
+   	left:0px;
+   	bottom:0px;
+
+	height: 60px;
+	width:100%;
+
+	background-color: yellow;
+}
+
+#tab-div{
+	margin: 11px;
+}
+
+.validation_error{	
+	color: red;
+	font-size: 16px;
+	font-weight: 900;
+	margin-top: 20px;
+	vertical-align: bottom;
+}
+
+.alert{	
+	color: red;
+	font-size: 16px;
+	font-weight: 900;
+	margin-top: 20px;
+	vertical-align: bottom;
+}

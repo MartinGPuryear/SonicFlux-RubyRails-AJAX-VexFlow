@@ -1,0 +1,37 @@
+<h1>Question Detail</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= questions_path %>'>All Questions</a>
+	| 
+<a href='<%= new_question_path %>'>New Question</a>
+
+<p>This is where detailed stats about a question could be shown.  How often offered, how frequently incorrect, etc.</p>
+
+<a href='<%= edit_question_path(@question.id) %>'>Edit</a>
+	| 
+<a href='<%= question_path(@question.id) %>' data-method='delete'>Delete</a>
+
+<table class='table table-condensed table-striped table-hover'>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Question Type ID</th>
+			<th>Choice Type</th>
+			<th>Difficulty Level</th>
+			<th>Content</th>
+			<th>Correct Choice ID</th>
+			<th>Close Choice ID</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= @question.id %></td>
+			<td><%= @question.question_type_id %></td>
+			<td><%= @question.choice_type %></td>
+			<td><%= @question.difficulty_level.desc %></td>
+			<td><%= @question.content %></td>
+			<td><%= @question.correct_choice_id %></td>
+			<td><%= @question.close_choice_id %></td>
+		</tr>
+	</tbody>
+</table>

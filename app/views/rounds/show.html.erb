@@ -1,0 +1,33 @@
+<h1>Round Detail</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= rounds_path %>'>All Rounds</a>
+	| 
+<a href='<%= new_round_path %>'>New Round</a>
+
+<p>
+	Unlikely to be used, but available for viewing an historical Round (num_participants, difficulty_level, created_at, updated_at), with linkage to its multiple Results and Question_Occurrences.  
+</p>
+
+<a href='<%= edit_round_path(@round.id) %>'>Edit</a>
+	| 
+<a href='<%= round_path(@round.id) %>' data-method='delete'>Delete</a>
+
+<table class='table table-condensed table-striped table-hover'>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Num Participants</th>
+			<th>Difficulty Level</th>
+			<th>Num Questions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= @round.id %></td>
+			<td><%= @round.num_participants %></td>
+			<td><%= @round.difficulty_level.desc %></td>
+			<td><%= @round.max_qo_index %></td>
+		</tr>
+	</tbody>
+</table>

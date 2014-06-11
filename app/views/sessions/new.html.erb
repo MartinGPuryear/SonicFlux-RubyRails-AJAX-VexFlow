@@ -1,0 +1,13 @@
+<h2>Sign In</h2>
+<h4>
+	Not a member? 
+	<a href='<%= new_user_path %>'>Sign up!</a> 
+	or just 
+	<a href='<%= play_path %>'>jump in!</a>
+</h4>
+
+<%= simple_form_for(:session, url: sessions_path, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do |u| %>
+    <%= u.input :player_tag, input_html: { autofocus: true }	 %>
+    <%= u.input :password 										 %>
+    <%= u.submit 'Sign In', class: 'btn btn-primary form-button' %>
+<% end %>

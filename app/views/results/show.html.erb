@@ -1,0 +1,48 @@
+<h1>Result Detail</h1>
+<h4>(admin-only)</h4>
+<p><em><strong> - OR - </strong></em></p>
+<h4>(To Be Implemented)</h4>
+<hr>
+
+<a href='<%= results_path %>'>All Results</a>
+	| 
+<a href='<%= new_result_path %>'>New Result</a>
+
+<p>This is where more details about a result set could be shown.</p>
+<p><em><strong> - OR - </strong></em></p>
+<p>This is where "Review What I Missed" could be....</p>
+<hr>
+
+<a href='<%= edit_result_path(@result.id) %>'>Edit</a>
+	| 
+<a href='<%= result_path(@result.id) %>' data-method='delete'>Delete</a>
+
+
+<table class='table table-condensed table-striped table-hover'>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>User ID</th>
+			<th>Round ID</th>
+			<th>Round Complete</th>
+			<th>Num Correct</th>
+			<th>Num Skipped</th>
+			<th>Num Incorrect</th>
+			<th>Points</th>
+			<th>Rank</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= @result.id %></td>
+			<td><%= @result.user_id %></td>
+			<td><%= @result.round_id %></td>
+			<td><%= @result.round_complete %></td>
+			<td><%= @result.num_correct %></td>
+			<td><%= @result.num_skipped %></td>
+			<td><%= @result.num_incorrect %></td>
+			<td><%= @result.points %></td>
+			<td><%= @result.rank %> of <%= @result.round.num_participants %></td>
+		</tr>
+	</tbody>
+</table>

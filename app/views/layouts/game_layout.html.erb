@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='UTF-8' />
+  <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+  <meta name='description' content='Sonic Flux Rails/Node hybrid page' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <meta name='author' content='Martin Puryear' />
+
+  <%= stylesheet_link_tag    "application", media: "all" %>
+
+  <script type='text/javascript' src='http://localhost:6789/socket.io/socket.io.js'></script>
+
+  <script type="text/javascript">
+    var io = io.connect("http://localhost:6789", 
+                          { 'force new connection': true
+                           ,'sync disconnect on unload': true 
+                          } 
+                       ); 
+
+    <%= yield :js_set_user_code %>
+  </script>
+
+  <%= javascript_include_tag "game" %>
+
+  <!-- < % = #audio_tag ["/assets/6-sec-tick.wav", "/assets/6-sec-tick.mp3"] % > -->
+
+  <%= csrf_meta_tags %>
+
+  <title>SonicFlux</title>
+
+</head>
+
+<body>
+  <div class='container-fluid'>
+    <%= render "shared/navbar" %>
+    
+    <%= yield :main_play_page %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<h2>Sign Up</h2>
+<h4>Already a member? <a href='<%= new_session_path %>'>Sign in!</a></h4>
+
+<%= simple_form_for(@user, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do |u| %>
+    <%= u.input :player_tag, input_html: { autofocus: true } 				%>
+    <%= u.input :difficulty_level_id, as: :hidden, input_html: { value: 1 }	%>
+    <%= u.input :password 													%>
+    <%= u.input :password_confirmation 										%>
+    <%= u.submit 'Sign Up', class: 'btn btn-primary form-button' 			%>
+<% end %>

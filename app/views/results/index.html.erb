@@ -1,0 +1,47 @@
+<h1>Results List</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= new_result_path %>'>New Result</a>
+
+<p>This is where historical results are listed.  Useful as a starting point for editing results, as a way to test the Leaderboard for example.</p>
+
+<% 	if @results.length	%>
+		<table class='table table-condensed table-striped table-hover'>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>User ID</th>
+					<th>Round ID</th>
+					<th>Round Complete</th>
+					<th>Num Correct</th>
+					<th>Num Skipped</th>
+					<th>Num Incorrect</th>
+					<th>Points</th>
+					<th>Rank</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+<%		@results.each { | r | %>
+				<tr>
+					<td><%= r.id %></td>
+					<td><%= r.user_id %></td>
+					<td><%= r.round_id %></td>
+					<td><%= r.round_complete %></td>
+					<td><%= r.num_correct %></td>
+					<td><%= r.num_skipped %></td>
+					<td><%= r.num_incorrect %></td>
+					<td><%= r.points %></td>
+					<td><%= r.rank %></td>
+					<td>
+						<a href='<%= result_path(r.id) %>'>Show</a>
+							| 
+						<a href='<%= edit_result_path(r.id) %>'>Edit</a>
+							| 
+						<a href='<%= result_path(r.id) %>' data-method='delete'>Delete</a>
+					</td>
+				</tr>
+<%		}	%>
+			</tbody>
+		</table>
+<%	end  %>

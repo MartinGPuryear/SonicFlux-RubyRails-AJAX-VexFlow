@@ -1,0 +1,52 @@
+<nav class='navbar navbar-default navbar-fixed-top' role='navigation'>
+  <div class='container-fluid'>
+    
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class='navbar-header'>
+      <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#bs-example-navbar-collapse-1'>
+        <span class='sr-only'>Toggle navigation</span>
+        <span class='icon-bar'></span>
+        <span class='icon-bar'></span>
+        <span class='icon-bar'></span>
+      </button>
+      <a class='navbar-brand' href='<%= about_path %>'>Sonic Flux</a>
+    </div>
+
+    <div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
+      <ul class='nav navbar-nav'>
+        <li><a href='<%= intro_path %>'>Intro</a></li>
+        <li><a href='<%= play_path %>'>Play</a></li>
+        <li><a href='<%= leaders_path %>'>Leaderboard</a></li>
+<% if signed_in? %>
+        <li><a href='/progress/<%= session[:user_id] %>'>My Progress</a></li>
+<!--        <form class='navbar-form navbar-left' role='search'><div class='form-group'><input type='text' class='form-control' placeholder='Find Others'></div></form> -->
+<%  end   %>
+      </ul>
+      <ul class='nav navbar-nav navbar-right'>
+<% if current_user_admin? %>
+        <li class='dropdown'>
+          <a href='#' class='dropdown-toggle' data-toggle='dropdown'>Admin<b class='caret'></b></a>
+          <ul class='dropdown-menu'>
+            <li><a href='<%= sessions_path %>'>Sessions</a></li>
+            <li><a href='<%= users_path %>'>Users</a></li>
+            <li><a href='<%= results_path %>'>Results</a></li>
+            <li><a href='<%= rounds_path %>'>Rounds</a></li>
+            <li><a href='<%= question_occurrences_path %>'>Question Sets</a></li>
+            <li><a href='<%= choices_path %>'>Choices</a></li>
+            <li><a href='<%= questions_path %>'>Questions</a></li>
+            <li><a href='<%= question_types_path %>'>Question Types</a></li>
+            <li><a href='<%= difficulty_levels_path %>'>Difficulty Levels</a></li>
+          </ul>
+        </li>        
+<%  end   %>
+<% if signed_in? %>
+        <li><a href='<%= user_path(current_user.id) %>'><strong><%= current_user.player_tag %></strong></a></li>
+        <li><a href='<%= signout_path %>'>Sign out</a></li>
+<%  elsif   %>
+        <li><a href='<%= signin_path %>'>Sign In</a></li>
+<%  end   %>
+      </ul>
+    </div>          <!-- /.navbar-collapse -->
+
+  </div>            <!-- /.container-fluid -->
+</nav>

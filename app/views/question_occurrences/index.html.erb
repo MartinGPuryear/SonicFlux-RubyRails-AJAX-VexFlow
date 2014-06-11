@@ -1,0 +1,37 @@
+<h1>Question Occurrences</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= new_question_occurrence_path %>'>New question occurrence</a>
+
+<p>Admins view the list of all occurrences of questions in rounds.  Perhaps useful for statistical analysis.</p>
+
+<% 	if @question_occurrences.length	%>
+		<table class='table table-condensed table-striped table-hover'>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Round ID</th>
+					<th>Question ID</th>
+					<th>Index in Round</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+<%		@question_occurrences.each { | qo | %>
+				<tr>
+					<td><%= qo.id %></td>
+					<td><%= qo.round_id %></td>
+					<td><%= qo.question_id %></td>
+					<td><%= qo.index_in_round %></td>
+					<td>
+						<a href='<%= question_occurrence_path(qo.id) %>'>Show</a>
+							| 
+						<a href='<%= edit_question_occurrence_path(qo.id) %>'>Edit</a>
+							| 
+						<a href='<%= question_occurrence_path(qo.id) %>' data-method='delete'>Delete</a>
+					</td>
+				</tr>
+<%		}	%>
+			</tbody>
+		</table>
+<%	end  %>

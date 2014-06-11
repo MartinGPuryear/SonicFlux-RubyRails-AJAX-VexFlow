@@ -1,0 +1,31 @@
+<h1>Question Occurrence Detail</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= question_occurrences_path %>'>All Question Occurrences</a>
+	| 
+<a href='<%= new_question_occurrence_path %>'>New Question Occurrence</a>
+
+<p>Detailed information about a single occurrence of a question in a round.</p>
+
+<a href='<%= edit_question_occurrence_path(@question_occurrence.id) %>'>Edit</a>
+	| 
+<a href='<%= question_occurrence_path(@question_occurrence.id) %>' data-method='delete'>Delete</a>
+
+<table class='table table-condensed table-striped table-hover'>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Round ID</th>
+			<th>Question ID</th>
+			<th>Index in Round</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><%= @question_occurrence.id %></td>
+			<td><%= @question_occurrence.round_id %></td>
+			<td><%= @question_occurrence.question_id %></td>
+			<td><%= @question_occurrence.index_in_round %></td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,22 @@
+<h1>Profile Editor</h1>
+
+<%  if current_user_admin?  %>
+<a href='<%= users_path %>'>All Users</a>
+  | 
+<a href='<%= new_user_path %>'>New User</a>
+<%  end   %>
+
+<%= simple_form_for(@user, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do | user |  %>
+    <%= user.input :player_tag, input_html: { autofocus: true }     %>
+    <%= user.input :password                                        %>
+    <%= user.input :password_confirmation                           %>
+    <%= user.association  :difficulty_level, include_blank: false,
+                          label_method: :desc, value_method: :id    %>
+    <%= user.submit 'Update', class: 'btn btn-primary form-button'  %>
+<% end %>
+
+<%  if current_user_admin?  %>
+<a href='<%= user_path(@user.id) %>'>Back</a>
+  | 
+<a href='<%= user_path(@user.id) %>' data-method='delete'>Delete</a>
+<%  end   %>

@@ -1,0 +1,19 @@
+<h1>Choice Editor</h1>
+<h4>(admin-only)</h4>
+
+<a href='<%= choices_path %>'>All Choices</a>
+	| 
+<a href='<%= new_choice_path %>'>New Choice</a>
+
+<p>Admins would use this page to change the prompt, content or choice type of a choice.  Additional details about this choice should show the list of questions where this choice is Correct, and those where it is considered Close.</p>
+
+<a href='<%= choice_path(@choice.id) %>'>Show</a>
+	| 
+<a href='<%= choice_path(@choice.id) %>' data-method='delete'>Delete</a>
+
+<%= simple_form_for(@choice, defaults: { input_html: { class: 'form-control' } }, html: {class: 'form-vertical' }) do |c|	%>
+    <%= c.input :choice_type, input_html: {autofocus: true }	%>
+    <%= c.input :prompt											%>
+    <%= c.input :content										%>
+    <%= c.submit 'Update', class: 'btn btn-primary form-button' %>
+<% end %>

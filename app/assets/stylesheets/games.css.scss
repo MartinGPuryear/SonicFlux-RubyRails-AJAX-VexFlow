@@ -1,0 +1,60 @@
+// Place all the styles related to the Games controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#lobby-page {
+  display: none;
+}
+
+#play-page {
+  display: none;
+}
+
+#countdown-bar {
+	min-width: 232px;
+}
+
+#countdown-bar .progress-bar {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+
+.progress-bar-bkgd {
+  background-image: -webkit-linear-gradient(top, #ebebeb 0%, #f5f5f5 100%);
+  background-image: linear-gradient(to bottom, #ebebeb 0%, #f5f5f5 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffebebeb', endColorstr='#fff5f5f5', GradientType=0);
+}
+
+#prog-bar-txt {
+	font-size: 13px;
+}
+
+.urgent {
+	color: red;
+  font-weight: 900;
+}
+
+.sxs {
+	display: inline-block;
+}
+
+#button-strip {
+	width: 140px;
+}
+
+.quiz-btn {
+	margin: 12px 3px 0px 3px;
+	width: 3.75em;
+}
+
+caption {
+  text-decoration: underline;
+}
+
+#score {
+  font-weight: 900;
+}
