@@ -35,8 +35,6 @@ class GamesController < ApplicationController
     # enable a Guest mode where Result records are simply not saved.  
   def play
     public_user
-    dump_round_vars "games#play - #{@public_user.player_tag} at diff_lvl #{@public_user.difficulty_level_id}"
-
     render layout: "game_layout"
   end
 
@@ -107,13 +105,9 @@ class GamesController < ApplicationController
   def change_difficulty
     user = current_user
     new_lvl = params[:difficulty_level]
-    puts "Entering change_difficulty for user #{user.id}, from #{user.difficulty_level_id} to #{new_lvl}"
     client_exited(user.id, user.difficulty_level_id)
-    puts 'change_difficulty(), after client_exited'
     user.update(difficulty_level_id: new_lvl)
-    puts 'change_difficulty(), after user.update'
     client_entered(user.id, user.difficulty_level_id)
-    puts 'change_difficulty(), after client_entered'
 
     change_response = {confirmed: true, new_room: user.difficulty_level_id }
     puts "change_difficulty(), change_response = confirmed:#{change_response[:confirmed]}, new_room:#{change_response[:new_room]}"
@@ -169,24 +163,18 @@ class GamesController < ApplicationController
     # and all the results for this user, to the view. 
   def progress
     dump_round_vars 'Entering progress()'
-    
     public_user(params[:id])
 
-    @hour_results = Result.all.where(user_id: params[:id]).where("results.created_at >= ?", DateTime.now.at_beginning_of_hour)
-    @day_results = Result.all.where(user_id: params[:id]).where("results.created_at >= ?", DateTime.now.at_beginning_of_day)
-    @week_results = Result.all.where(user_id: params[:id]).where("results.created_at >= ?", DateTime.now.at_beginning_of_week)
-    @month_results = Result.all.where(user_id: params[:id]).where("results.created_at >= ?", DateTime.now.at_beginning_of_month)
-    @year_results = Result.all.where(user_id: params[:id]).where("results.created_at >= ?", DateTime.now.at_beginning_of_year)
-    @all_results = Result.all.where(user_id: params[:id])
-    
-    # results = Result.retrieve_my_progress(params[:id].to_i);
-    # @results = results['all'];
-    # @year_results = results['year'];
-    # @month_results = results['month'];
-    # @week_results = results['week'];
-    # @day_results = results['day'];
-    # @hour_results = results['hour'];
+    results = Result.retrieve_my_progress(params[:id])
 
+    puts results
+
+    @all_results   = results['all']
+    @year_results  = results['year']
+    @month_results = results['month']
+    @week_results  = results['week']
+    @day_results   = results['day']
+    @hour_results  = results['hour']
   end
 
   #   Show the historical leaderboard.
@@ -195,7 +183,12 @@ class GamesController < ApplicationController
   def leaders
     dump_round_vars 'Entering leaders()'
     
-    @results = Result.select("player_tag, points, results.created_at").joins(:user)
     @num_leaders = NUM_LEADERS_TO_DISPLAY
+    @all_points = Result.retrieve_leaders(nil)
+    @year_points = Result.retrieve_leaders(DateTime.now.at_beginning_of_year)
+    @month_points = Result.retrieve_leaders(DateTime.now.at_beginning_of_month)
+    @week_points = Result.retrieve_leaders(DateTime.now.at_beginning_of_week)
+    @day_points = Result.retrieve_leaders(DateTime.now.at_beginning_of_day)
+    @hour_points = Result.retrieve_leaders(DateTime.now.at_beginning_of_hour)
   end
 end

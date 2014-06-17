@@ -42,17 +42,9 @@ public
     # updated_at, etc (eventually facebook_id) are irrelevant anyway.
   def public_user(user_id=nil)
     if user_id.nil?
-      if @public_user
-        puts "public_user before: #{@public_user.difficulty_level_id} ***************************************************************************************"
-      end
       @public_user ||= User.select("id, player_tag, difficulty_level_id").find(session[:user_id]) if session[:user_id]
-      puts "public_user.diff_lvl after: #{@public_user.difficulty_level_id} ***************************************************************************************"
     else
-      if @public_user
-        puts "public_user.diff_lvl before: #{@public_user.difficulty_level_id} ***************************************************************************************"
-      end
       @public_user ||= User.select("id, player_tag, difficulty_level_id").find(user_id)
-      puts "public_user.diff_lvl after: #{@public_user.difficulty_level_id} ***************************************************************************************"
     end
     return @public_user
   end

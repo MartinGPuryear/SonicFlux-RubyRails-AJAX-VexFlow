@@ -14,33 +14,36 @@ module GamesHelper
     POINTS_FOR_CORRECT = 10
 
   #   State variables used across various controllers
-    puts "init code at GamesHelper() **************************************************************************************"
-    @@clientList = Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| Array.new() }
-    @@prev_round = Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| nil }
-    @@curr_round = Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| nil }
-    @@next_round = Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| nil }
+    @@round_in_progress ||= false
 
-      puts "This is prev_round:        #{ @@prev_round.to_s }"
-      puts "This is curr_round:        #{ @@curr_round.to_s }"
-      puts "This is next_round:        #{ @@next_round.to_s }"
+    @@clientList ||= Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| Array.new() }
 
-      FIRST_ROOM_NUM.upto(FIRST_ROOM_NUM + NUM_ROOMS - 1) { |room| 
-        puts "Room[#{room}]: #{@@clientList[room]}"
+    @@prev_round ||= Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| nil }
+    @@curr_round ||= Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| nil }
+    @@next_round ||= Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| nil }
+
+    FIRST_ROOM_NUM.upto(FIRST_ROOM_NUM + NUM_ROOMS - 1) { |room|
+          @@prev_round[room] ||= @@curr_round[room] ||= @@next_round[room] ||= nil
+          @@clientList[room] ||= Array.new()
       }
-    
-    puts "Done with init code at GamesHelper() *****************************************************************************"
+
+    puts "Done with init code at GamesHelper() *****************************************************************************"    
 
   #   One-time setup code, run when the server starts up.
     # Called from environment.rb, after SonicFlux::Application.initialize!
   def run_startup_code
     puts 'run_startup_code() ***********************************************************************************************'
-    
+    dump_round_vars
+
     # Initialize the array of rounds and clients, and prepare the first set of questions
     @@round_in_progress ||= false
+
     @@clientList ||= Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| Array.new() }
+
     @@prev_round ||= Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| nil }
     @@curr_round ||= Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| nil }
     @@next_round ||= Array.new(FIRST_ROOM_NUM + NUM_ROOMS) { |rm| nil }
+
     FIRST_ROOM_NUM.upto(FIRST_ROOM_NUM + NUM_ROOMS - 1) { |room| 
           @@prev_round[room] ||= @@curr_round[room] ||= @@next_round[room] ||= nil
           @@clientList[room] ||= Array.new()
@@ -70,16 +73,26 @@ module GamesHelper
     puts after_str
   end
 
-  #   Create a round & question set, if next_round[room] isn't already set
+  #   Create a round & question set, if next_round[room] isn't already set.
+  #   Account for when the round is already underway, as well.
   def prepare_round(diff_lvl)
     dump_round_vars "Entering prepare_round(#{diff_lvl}), @@round_in_progress= #{ @@round_in_progress }"
 
-    if (@@next_round[diff_lvl] == nil)
+    round_id = nil
+    round_id = @@curr_round[diff_lvl] if @@round_in_progress == true
+    round_id = @@next_round[diff_lvl] if round_id.nil?
+
+    if (round_id == nil)
       round = Round.new(difficulty_level_id: diff_lvl)
       round.save
-      @@next_round[diff_lvl] = round.id
 
-      create_question_set(@@next_round[diff_lvl])
+      if (@@round_in_progress == true)
+        @@curr_round[diff_lvl] = round.id
+      else
+        @@next_round[diff_lvl] = round.id
+      end
+
+      create_question_set(round.id)
 
       # if !MODE_0, send Q+C's to all in room, for quick use later
       # if so, need to create the non-close incorrect choices as well!!
@@ -152,7 +165,7 @@ module GamesHelper
     calculate_result_ranks(round_id)
     round_id = prune_round(round_id)
     
-    dump_round_vars "",'Exiting finalize_round()'
+    dump_round_vars '','Exiting finalize_round()'
     return round_id
   end
   
@@ -180,9 +193,11 @@ module GamesHelper
     # number them incrementally. For ties, each gets the better score.
     # I.e. if 3 results were equal, all receive "1 out of 3".
   def calculate_result_ranks(round_id)
+    puts "calculate_result_ranks(#{round_id})"
+
     rank = 1
     num_ties = 0
-    prev_score = 0
+    prev_score = -1
     results = Result.all.where(round_complete: true).where("round_id = ?",round_id).order(points: :desc).each{ 
                           |t| 
                             if (t.points == prev_score)
@@ -333,30 +348,27 @@ module GamesHelper
     if (@@curr_round[room] != nil)
       result = Result.where("user_id = ?", user_id).where("round_id = ?", @@curr_round[room]).first
       result.update(round_complete: false) if !result.nil?
-    elsif (@@next_round[room])
-      result = Result.where("user_id = ?", user_id).where("round_id = ?", @@next_round[room]).first
-      result.destroy if !result.nil?
     end
     @@clientList[room] -= [user_id]
 
     if @@clientList[room].empty?      # room is empty, so...
-      cleanupEmptyRoom(room)
+      cleanup_empty_room(room)
     end
     dump_round_vars '', 'Exiting client_exited()'
   end
 
   #   Room is now empty. Finalize any previous or current round.
-  def cleanupEmptyRoom(room)
-    dump_round_vars 'Entering cleanupEmptyRoom()'
-    if @@prev_round[room]
-      finalize_round(@@prev_round[room])  # ...finalize any previous round
-      @@prev_round[room] = nil
-    end
-    if (@@curr_round[room])                
-      finalize_round(@@curr_round[room])  # ...finalize any in-progress round
-      @@curr_round[room] = nil
-    end
-    dump_round_vars '', 'Exiting cleanupEmptyRoom()'
+  def cleanup_empty_room(room)
+    # dump_round_vars 'Entering cleanup_empty_room()'
+    # if !@@prev_round[room].nil?
+    #   finalize_round(@@prev_round[room])  # ...finalize any previous round
+    #   @@prev_round[room] = nil
+    # end
+    # if !@@curr_round[room].nil?
+    #   finalize_round(@@curr_round[room])  # ...finalize any in-progress round
+    #   # @@curr_round[room] = nil
+    # end
+    # dump_round_vars '', 'Exiting cleanup_empty_room()'
   end
 
   #   User entered the gameplay view - set state vars, call client_entered 

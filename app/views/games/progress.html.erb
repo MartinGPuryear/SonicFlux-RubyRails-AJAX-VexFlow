@@ -5,11 +5,26 @@
 <%  end   %>
 
 <ul class="nav nav-pills">
+<%  if !@hour_results['total_rounds'].nil?   %>
   <li><a href="#hour" data-toggle="tab">This Hour</a></li>
+<%  end
+    if (!@day_results['total_rounds'].nil?) &&
+       (@day_results['total_rounds'] != @hour_results['total_rounds'])   %>
   <li><a href="#day" data-toggle="tab">Today</a></li>
+<%  end
+    if (!@week_results['total_rounds'].nil?) &&
+       (@week_results['total_rounds'] != @day_results['total_rounds'])   %>
   <li><a href="#week" data-toggle="tab">This Week</a></li>
+<%  end
+    if (!@month_results['total_rounds'].nil?) &&
+       (@month_results['total_rounds'] != @week_results['total_rounds'])   %>
   <li><a href="#month" data-toggle="tab">This Month</a></li>
+<%  end
+    if (!@year_results['total_rounds'].nil?) &&
+       (@year_results['total_rounds'] != @month_results['total_rounds']) &&
+       (@year_results['total_rounds'] != @all_results['total_rounds'])   %>
   <li><a href="#year" data-toggle="tab">This Year</a></li>
+<%  end   %>
   <li class="active"><a href="#all" data-toggle="tab">All Time</a></li>
 </ul>
 
@@ -18,61 +33,29 @@
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr>
-            <td>High Score</td>
-            <td><% if (@hour_results.blank?) %> - <% else %><%= @hour_results.maximum("points") %><% end %></td>
-          </tr>
-          <tr>
-            <td>Average Score</td>
-            <td><% if (@hour_results.where(round_complete: true).blank?) %> - <% else %><%= @hour_results.where(round_complete: true).average("points").round(2) %><% end %></td>
-          </tr>
-          <tr>
-            <td>Best Ranking</td>
-            <td>
-              <% if (@hour_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @hour_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.rank %>
-                out of 
-                <%= @hour_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.num_participants %>
-              <% end %>
-            </td>
-          </tr>
-          <tr>
-            <td>Average Ranking</td>
-            <td>
-              <% if (@hour_results.where(round_complete: true).average("rank").blank?) %>
-                 - 
-              <% else %>
-                <%= @hour_results.where(round_complete: true).average("rank").round(2) %>
-                 out of 
-                <%= @hour_results.joins(:round).where(round_complete: true).average("num_participants").round(2) %>
-              <% end %>
-            </td>
-          </tr>
+          <tr><td>High Score</td><td><%= @hour_results['high_score'] %></td></tr>
+          <tr><td>Average Score</td><td><%= @hour_results['avg_score'] %></td></tr>
+          <tr><td>Best Ranking</td><td><%= @hour_results['best_rank'] %></td></tr>
+          <tr><td>Average Ranking</td><td><%= @hour_results['avg_rank'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Total Points</td><td><%= @hour_results.sum('points') %></td></tr>
-          <tr>
-            <td>Top 10% Rounds</td>
-            <td><%= @hour_results.joins(:round).select("(rank-1)*10000/num_participants as quality").where(round_complete: true).where("(rank-1)*10000/num_participants < 1000").count %>
-            </td>
-          </tr>
-          <tr><td>Complete Rounds</td><td><%= @hour_results.where(round_complete: true).count %></td></tr>
-          <tr><td>Partial Rounds</td><td><%= @hour_results.where(round_complete: false).count %></td></tr>
+          <tr><td>Total Points</td><td><%= @hour_results['total_points'] %></td></tr>
+          <tr><td>Top 10% Rounds</td><td><%= @hour_results['top_ten_percent_rounds'] %></td></tr>
+          <tr><td>Complete Rounds</td><td><%= @hour_results['complete_rounds'] %></td></tr>
+          <tr><td>Partial Rounds</td><td><%= @hour_results['partial_rounds'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Questions Correct</td><td><%= @hour_results.sum("num_correct") %></td></tr>
-          <tr><td>Questions Skipped</td><td><%= @hour_results.sum("num_skipped") %></td></tr>
-          <tr><td>Questions Incorrect</td><td><%= @hour_results.sum("num_incorrect") %></td></tr>
+          <tr><td>Questions Correct</td><td><%= @hour_results['total_num_correct'] %></td></tr>
+          <tr><td>Questions Skipped</td><td><%= @hour_results['total_num_skipped'] %></td></tr>
+          <tr><td>Questions Incorrect</td><td><%= @hour_results['total_num_incorrect'] %></td></tr>
         </tbody>
       </table>
     </div>
@@ -81,61 +64,29 @@
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr>
-            <td>High Score</td>
-            <td><% if (@day_results.blank?) %> - <% else %><%= @day_results.maximum("points") %><% end %></td>
-          </tr>
-          <tr>
-            <td>Average Score</td>
-            <td><% if (@day_results.where(round_complete: true).blank?) %> - <% else %><%= @day_results.where(round_complete: true).average("points").round(2) %><% end %></td>
-          </tr>
-          <tr>
-            <td>Best Ranking</td>
-            <td>
-              <% if (@day_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @day_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.rank %>
-                out of 
-                <%= @day_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.num_participants %>
-              <% end %>
-            </td>
-          </tr>
-          <tr>
-            <td>Average Ranking</td>
-            <td>
-              <% if (@day_results.where(round_complete: true).average("rank").blank?) %>
-                 - 
-              <% else %>
-                <%= @day_results.where(round_complete: true).average("rank").round(2) %>
-                out of 
-                <%= @day_results.joins(:round).where(round_complete: true).average("num_participants").round(2) %>
-              <% end %>
-            </td>
-          </tr>
+          <tr><td>High Score</td><td><%= @day_results['high_score'] %></td></tr>
+          <tr><td>Average Score</td><td><%= @day_results['avg_score'] %></td></tr>
+          <tr><td>Best Ranking</td><td><%= @day_results['best_rank'] %></td></tr>
+          <tr><td>Average Ranking</td><td><%= @day_results['avg_rank'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Total Points</td><td><%= @day_results.sum('points') %></td></tr>
-          <tr>
-            <td>Top 10% Rounds</td>
-            <td><%= @day_results.joins(:round).select("(rank-1)*10000/num_participants as quality").where(round_complete: true).where("(rank-1)*10000/num_participants < 1000").count %>
-            </td>
-          </tr>
-          <tr><td>Complete Rounds</td><td><%= @day_results.where(round_complete: true).count %></td></tr>
-          <tr><td>Partial Rounds</td><td><%= @day_results.where(round_complete: false).count %></td></tr>
+          <tr><td>Total Points</td><td><%= @day_results['total_points'] %></td></tr>
+          <tr><td>Top 10% Rounds</td><td><%= @day_results['top_ten_percent_rounds'] %></td></tr>
+          <tr><td>Complete Rounds</td><td><%= @day_results['complete_rounds'] %></td></tr>
+          <tr><td>Partial Rounds</td><td><%= @day_results['partial_rounds'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Questions Correct</td><td><%= @day_results.sum("num_correct") %></td></tr>
-          <tr><td>Questions Skipped</td><td><%= @day_results.sum("num_skipped") %></td></tr>
-          <tr><td>Questions Incorrect</td><td><%= @day_results.sum("num_incorrect") %></td></tr>
+          <tr><td>Questions Correct</td><td><%= @day_results['total_num_correct'] %></td></tr>
+          <tr><td>Questions Skipped</td><td><%= @day_results['total_num_skipped'] %></td></tr>
+          <tr><td>Questions Incorrect</td><td><%= @day_results['total_num_incorrect'] %></td></tr>
         </tbody>
       </table>
     </div>
@@ -144,61 +95,29 @@
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr>
-            <td>High Score</td>
-            <td><% if (@week_results.blank?) %> - <% else %><%= @week_results.maximum("points") %><% end %></td>
-          </tr>
-          <tr>
-            <td>Average Score</td>
-            <td><% if (@week_results.where(round_complete: true).blank?) %> - <% else %><%= @week_results.where(round_complete: true).average("points").round(2) %><% end %></td>
-          </tr>
-          <tr>
-            <td>Best Ranking</td>
-            <td>
-              <% if (@week_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @week_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.rank %>
-                out of 
-                <%= @week_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.num_participants %>
-              <% end %>
-            </td>
-          </tr>
-          <tr>
-            <td>Average Ranking</td>
-            <td>
-              <% if (@week_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @week_results.where(round_complete: true).average("rank").round(2) %>
-                out of 
-                <%= @week_results.joins(:round).where(round_complete: true).average("num_participants").round(2) %>
-              <% end %>
-            </td>
-          </tr>
+          <tr><td>High Score</td><td><%= @week_results['high_score'] %></td></tr>
+          <tr><td>Average Score</td><td><%= @week_results['avg_score'] %></td></tr>
+          <tr><td>Best Ranking</td><td><%= @week_results['best_rank'] %></td></tr>
+          <tr><td>Average Ranking</td><td><%= @week_results['avg_rank'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Total Points</td><td><%= @week_results.sum('points') %></td></tr>
-          <tr>
-            <td>Top 10% Rounds</td>
-            <td><%= @week_results.joins(:round).select("(rank-1)*10000/num_participants as quality").where(round_complete: true).where("(rank-1)*10000/num_participants < 1000").count %>
-            </td>
-          </tr>
-          <tr><td>Complete Rounds</td><td><%= @week_results.where(round_complete: true).count %></td></tr>
-          <tr><td>Partial Rounds</td><td><%= @week_results.where(round_complete: false).count %></td></tr>
+          <tr><td>Total Points</td><td><%= @week_results['total_points'] %></td></tr>
+          <tr><td>Top 10% Rounds</td><td><%= @week_results['top_ten_percent_rounds'] %></td></tr>
+          <tr><td>Complete Rounds</td><td><%= @week_results['complete_rounds'] %></td></tr>
+          <tr><td>Partial Rounds</td><td><%= @week_results['partial_rounds'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Questions Correct</td><td><%= @week_results.sum("num_correct") %></td></tr>
-          <tr><td>Questions Skipped</td><td><%= @week_results.sum("num_skipped") %></td></tr>
-          <tr><td>Questions Incorrect</td><td><%= @week_results.sum("num_incorrect") %></td></tr>
+          <tr><td>Questions Correct</td><td><%= @week_results['total_num_correct'] %></td></tr>
+          <tr><td>Questions Skipped</td><td><%= @week_results['total_num_skipped'] %></td></tr>
+          <tr><td>Questions Incorrect</td><td><%= @week_results['total_num_incorrect'] %></td></tr>
         </tbody>
       </table>
     </div>
@@ -207,61 +126,29 @@
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr>
-            <td>High Score</td>
-            <td><% if (@month_results.blank?) %> - <% else %><%= @month_results.maximum("points") %><% end %></td>
-          </tr>
-          <tr>
-            <td>Average Score</td>
-            <td><% if (@month_results.where(round_complete: true).blank?) %> - <% else %><%= @month_results.where(round_complete: true).average("points").round(2) %><% end %></td>
-          </tr>
-          <tr>
-            <td>Best Ranking</td>
-            <td>
-              <% if (@month_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @month_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.rank %>
-                out of 
-                <%= @month_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.num_participants %>
-              <% end %>
-            </td>
-          </tr>
-          <tr>
-            <td>Average Ranking</td>
-            <td>
-              <% if (@month_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @month_results.where(round_complete: true).average("rank").round(2) %>
-                out of 
-                <%= @month_results.joins(:round).where(round_complete: true).average("num_participants").round(2) %>
-              <% end %>
-            </td>
-          </tr>
+          <tr><td>High Score</td><td><%= @month_results['high_score'] %></td></tr>
+          <tr><td>Average Score</td><td><%= @month_results['avg_score'] %></td></tr>
+          <tr><td>Best Ranking</td><td><%= @month_results['best_rank'] %></td></tr>
+          <tr><td>Average Ranking</td><td><%= @month_results['avg_rank'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Total Points</td><td><%= @month_results.sum('points') %></td></tr>
-          <tr>
-            <td>Top 10% Rounds</td>
-            <td><%= @month_results.joins(:round).select("(rank-1)*10000/num_participants as quality").where(round_complete: true).where("(rank-1)*10000/num_participants < 1000").count %>
-            </td>
-          </tr>
-          <tr><td>Complete Rounds</td><td><%= @month_results.where(round_complete: true).count %></td></tr>
-          <tr><td>Partial Rounds</td><td><%= @month_results.where(round_complete: false).count %></td></tr>
+          <tr><td>Total Points</td><td><%= @month_results['total_points'] %></td></tr>
+          <tr><td>Top 10% Rounds</td><td><%= @month_results['top_ten_percent_rounds'] %></td></tr>
+          <tr><td>Complete Rounds</td><td><%= @month_results['complete_rounds'] %></td></tr>
+          <tr><td>Partial Rounds</td><td><%= @month_results['partial_rounds'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Questions Correct</td><td><%= @month_results.sum("num_correct") %></td></tr>
-          <tr><td>Questions Skipped</td><td><%= @month_results.sum("num_skipped") %></td></tr>
-          <tr><td>Questions Incorrect</td><td><%= @month_results.sum("num_incorrect") %></td></tr>
+          <tr><td>Questions Correct</td><td><%= @month_results['total_num_correct'] %></td></tr>
+          <tr><td>Questions Skipped</td><td><%= @month_results['total_num_skipped'] %></td></tr>
+          <tr><td>Questions Incorrect</td><td><%= @month_results['total_num_incorrect'] %></td></tr>
         </tbody>
       </table>
     </div>
@@ -270,61 +157,29 @@
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr>
-            <td>High Score</td>
-            <td><% if (@year_results.blank?) %> - <% else %><%= @year_results.maximum("points") %><% end %></td>
-          </tr>
-          <tr>
-            <td>Average Score</td>
-            <td><% if (@year_results.where(round_complete: true).blank?) %> - <% else %><%= @year_results.where(round_complete: true).average("points").round(2) %><% end %></td>
-          </tr>
-          <tr>
-            <td>Best Ranking</td>
-            <td>
-              <% if (@year_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @year_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.rank %>
-                out of 
-                <%= @year_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.num_participants %>
-              <% end %>
-            </td>
-          </tr>
-          <tr>
-            <td>Average Ranking</td>
-            <td>
-              <% if (@year_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @year_results.where(round_complete: true).average("rank").round(2) %>
-                 out of 
-                <%= @year_results.joins(:round).where(round_complete: true).average("num_participants").round(2) %>
-              <% end %>
-            </td>
-          </tr>
+          <tr><td>High Score</td><td><%= @year_results['high_score'] %></td></tr>
+          <tr><td>Average Score</td><td><%= @year_results['avg_score'] %></td></tr>
+          <tr><td>Best Ranking</td><td><%= @year_results['best_rank'] %></td></tr>
+          <tr><td>Average Ranking</td><td><%= @year_results['avg_rank'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Total Points</td><td><%= @year_results.sum('points') %></td></tr>
-          <tr>
-            <td>Top 10% Rounds</td>
-            <td><%= @year_results.joins(:round).select("(rank-1)*10000/num_participants as quality").where(round_complete: true).where("(rank-1)*10000/num_participants < 1000").count %>
-            </td>
-          </tr>
-          <tr><td>Complete Rounds</td><td><%= @year_results.where(round_complete: true).count %></td></tr>
-          <tr><td>Partial Rounds</td><td><%= @year_results.where(round_complete: false).count %></td></tr>
+          <tr><td>Total Points</td><td><%= @year_results['total_points'] %></td></tr>
+          <tr><td>Top 10% Rounds</td><td><%= @year_results['top_ten_percent_rounds'] %></td></tr>
+          <tr><td>Complete Rounds</td><td><%= @year_results['complete_rounds'] %></td></tr>
+          <tr><td>Partial Rounds</td><td><%= @year_results['partial_rounds'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Questions Correct</td><td><%= @year_results.sum("num_correct") %></td></tr>
-          <tr><td>Questions Skipped</td><td><%= @year_results.sum("num_skipped") %></td></tr>
-          <tr><td>Questions Incorrect</td><td><%= @year_results.sum("num_incorrect") %></td></tr>
+          <tr><td>Questions Correct</td><td><%= @year_results['total_num_correct'] %></td></tr>
+          <tr><td>Questions Skipped</td><td><%= @year_results['total_num_skipped'] %></td></tr>
+          <tr><td>Questions Incorrect</td><td><%= @year_results['total_num_incorrect'] %></td></tr>
         </tbody>
       </table>
     </div>
@@ -333,61 +188,29 @@
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr>
-            <td>High Score</td>
-            <td><% if (@all_results.blank?) %> - <% else %><%= @all_results.maximum("points") %><% end %></td>
-          </tr>
-          <tr>
-            <td>Average Score</td>
-            <td><% if (@all_results.where(round_complete: true).blank?) %> - <% else %><%= @all_results.where(round_complete: true).average("points").round(2) %><% end %></td>
-          </tr>
-          <tr>
-            <td>Best Ranking</td>
-            <td>
-              <% if (@all_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @all_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.rank %>
-                out of 
-                <%= @all_results.select("rank, num_participants, rank*10000/num_participants as quality").joins(:round).where(round_complete: true).order("quality ASC, num_participants DESC").first.num_participants %>
-              <% end %>
-            </td>
-          </tr>
-          <tr>
-            <td>Average Ranking</td>
-            <td>
-              <% if (@all_results.where(round_complete: true).blank?) %>
-                 - 
-              <% else %>
-                <%= @all_results.where(round_complete: true).average("rank").round(2) %>
-                 out of 
-                <%= @all_results.joins(:round).where(round_complete: true).average("num_participants").round(2) %>
-              <% end %>
-            </td>
-          </tr>
+          <tr><td>High Score</td><td><%= @all_results['high_score'] %></td></tr>
+          <tr><td>Average Score</td><td><%= @all_results['avg_score'] %></td></tr>
+          <tr><td>Best Ranking</td><td><%= @all_results['best_rank'] %></td></tr>
+          <tr><td>Average Ranking</td><td><%= @all_results['avg_rank'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Total Points</td><td><%= @all_results.sum('points') %></td></tr>
-          <tr>
-            <td>Top 10% Rounds</td>
-            <td><%= @all_results.joins(:round).select("(rank-1)*10000/num_participants as quality").where(round_complete: true).where("(rank-1)*10000/num_participants < 1000").count %>
-            </td>
-          </tr>
-          <tr><td>Complete Rounds</td><td><%= @all_results.where(round_complete: true).count %></td></tr>
-          <tr><td>Partial Rounds</td><td><%= @all_results.where(round_complete: false).count %></td></tr>
+          <tr><td>Total Points</td><td><%= @all_results['total_points'] %></td></tr>
+          <tr><td>Top 10% Rounds</td><td><%= @all_results['top_ten_percent_rounds'] %></td></tr>
+          <tr><td>Complete Rounds</td><td><%= @all_results['complete_rounds'] %></td></tr>
+          <tr><td>Partial Rounds</td><td><%= @all_results['partial_rounds'] %></td></tr>
         </tbody>
       </table>
     </div>
     <div class='col-xs-4'>
       <table class='table table-striped table-condensed table-hover'>
         <tbody>
-          <tr><td>Questions Correct</td><td><%= @all_results.sum("num_correct") %></td></tr>
-          <tr><td>Questions Skipped</td><td><%= @all_results.sum("num_skipped") %></td></tr>
-          <tr><td>Questions Incorrect</td><td><%= @all_results.sum("num_incorrect") %></td></tr>
+          <tr><td>Questions Correct</td><td><%= @all_results['total_num_correct'] %></td></tr>
+          <tr><td>Questions Skipped</td><td><%= @all_results['total_num_skipped'] %></td></tr>
+          <tr><td>Questions Incorrect</td><td><%= @all_results['total_num_incorrect'] %></td></tr>
         </tbody>
       </table>
     </div>
