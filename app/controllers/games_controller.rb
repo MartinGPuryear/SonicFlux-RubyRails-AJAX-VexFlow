@@ -167,8 +167,6 @@ class GamesController < ApplicationController
 
     results = Result.retrieve_my_progress(params[:id])
 
-    puts results
-
     @all_results   = results['all']
     @year_results  = results['year']
     @month_results = results['month']
